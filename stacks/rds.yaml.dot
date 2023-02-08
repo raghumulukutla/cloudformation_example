@@ -1,0 +1,9 @@
+digraph "template" {
+DBEC2SecurityGroup [color=black, label="DBEC2SecurityGroup\n<AWS::EC2::SecurityGroup>", shape=ellipse, type=Resource];
+DBSecurityGroup [color=black, label="DBSecurityGroup\n<AWS::RDS::DBSecurityGroup>", shape=ellipse, type=Resource];
+MasterDB [color=black, label="MasterDB\n<AWS::RDS::DBInstance>", shape=ellipse, type=Resource];
+ReplicaDB [color=black, label="ReplicaDB\n<AWS::RDS::DBInstance>", shape=ellipse, type=Resource];
+MasterDB -> DBSecurityGroup  [color=black, key=0, label=Ref, source_paths="['Properties', 'DBSecurityGroups', 'Fn::If', 1, 0]"];
+MasterDB -> DBEC2SecurityGroup  [color=black, key=0, label=GetAtt, source_paths="['Properties', 'VPCSecurityGroups', 'Fn::If', 1, 0]"];
+ReplicaDB -> MasterDB  [color=black, key=0, label=Ref, source_paths="['Properties', 'SourceDBInstanceIdentifier']"];
+}
